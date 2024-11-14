@@ -23,10 +23,13 @@ from drf_spectacular.views import (
 )
 from rest_framework.versioning import URLPathVersioning
 
-api_urls = [
+app_urls = [
     path('', include('materials.api.urls')),
 ]
 
+api_urls = [
+    path('api/', include(app_urls))
+]
 
 swagger_urls = [
     path('schema/v1/', SpectacularAPIView.as_view(

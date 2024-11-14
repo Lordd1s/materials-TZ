@@ -28,7 +28,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = 'django-insecure-a9+7s@tna4k56sr!c!y!9=6vj@t2+*fas13j6e&q@rh2fgxfmg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.str('DEBUG', default=False)
+DEBUG = env.str('DEBUG', default=True)
 
 ALLOWED_HOSTS = []
 
@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_spectacular',
+    'drf_spectacular_sidecar',
+    'drf_standardized_errors',
     *PROJECT_APPS
 ]
 
@@ -113,6 +115,20 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_standardized_errors.openapi.AutoSchema',
+    'EXCEPTION_HANDLER': 'drf_standardized_errors.handler.exception_handler',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        "rest_framework.authentication.BasicAuthentication",
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.MultiPartParser',
+    ]
+}
 
 
 # Internationalization
