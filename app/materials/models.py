@@ -13,7 +13,7 @@ class Category(models.Model):
     )
 
     class Meta:
-        ordering = ('name', 'parent')
+        ordering = ('name', )
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
@@ -23,9 +23,13 @@ class Category(models.Model):
 
 class Material(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название материала')
-    category = models.ForeignKey(to=Category, on_delete=models.PROTECT, verbose_name='Категория')
-    article = models.IntegerField(max_length=20, verbose_name='Код материала')
+    category = models.ForeignKey(
+        to=Category,
+        on_delete=models.PROTECT,
+        verbose_name='Категория')
+    article = models.IntegerField(verbose_name='Код материала')
     price = models.IntegerField(verbose_name='Стоимость материала')
+
 
     class Meta:
         ordering = ('price', 'name')
