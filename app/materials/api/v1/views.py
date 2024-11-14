@@ -1,6 +1,5 @@
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import viewsets, status
-from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,7 +13,6 @@ from materials.api.v1.serializers import (
     CategoryTreeSerializer,
     CategoryWriteSerializer,
     MaterialFullSerializer,
-    MaterialNameSerializer,
     MaterialWriteSerializer,
     FileUploadSerializer
 )
