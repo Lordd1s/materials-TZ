@@ -1,3 +1,4 @@
+from django.db.models import Q
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import viewsets, status
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
@@ -32,7 +33,7 @@ from materials.api.v1.services import xlsx, specific_queries
     ),
     create=extend_schema(
         summary='Создать Материал',
-        description='Создать новый Материал.',
+        description='Создает новый Материал если Категория самая дочерняя',
         responses={201: MaterialWriteSerializer()},
     ),
     update=extend_schema(
@@ -59,6 +60,34 @@ class MaterialViewSet(viewsets.ModelViewSet):
         if self.action in ('create', 'update', 'partial_update'):
             return MaterialWriteSerializer
         return MaterialFullSerializer
+
+    def create(self, request, *args, **kwargs):
+        subcategory_id = request.data.get('subcategory_id')
+        category = Category.objects.filter(
+            Q(id=subcategory_id)
+            &
+            ~Q(children__isnull=False)
+        ).first()
+        if not category:
+            return Response(
+                {'error': 'Invalid subcategory or not a leaf category.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        data = serializer.validated_data.copy()
+        data.pop('subcategory_id')
+        Material.objects.create(
+            **data,
+            category=category
+        )
+
+        return Response(
+            {'msg': 'Successfully created'},
+            status=status.HTTP_201_CREATED
+        )
 
 
 class CreateMaterialFromXLSX(APIView):

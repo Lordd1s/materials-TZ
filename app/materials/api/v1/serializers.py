@@ -40,10 +40,11 @@ class MaterialFullSerializer(serializers.ModelSerializer):
 
 
 class MaterialWriteSerializer(serializers.ModelSerializer):
+    subcategory_id = serializers.IntegerField()
 
     class Meta:
         model = Material
-        fields = ('name', 'article', 'price')
+        fields = ('name', 'article', 'price', 'subcategory_id')
 
 
 class MaterialSerializerForTree(MaterialFullSerializer):
