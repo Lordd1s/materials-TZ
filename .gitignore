@@ -130,6 +130,9 @@ ENV/
 env.bak/
 venv.bak/
 .idea/
+/app/app
+/public/
+/app/public
 
 # Spyder project settings
 .spyderproject

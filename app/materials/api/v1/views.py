@@ -78,7 +78,9 @@ class CreateMaterialFromXLSX(APIView):
         },
         responses={
             201: 'Datas uploaded and writed to DB successfully'
-        }
+        },
+        summary='С xlsx файла читает и записывает в БД',
+        description='ВАЖНО! Файл должен быть структурирован правильно! name, article, price, category_name'
     )
     def post(self, request, *args, **kwargs):
         serializer = FileUploadSerializer(data=request.data)
