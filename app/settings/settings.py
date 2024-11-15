@@ -15,6 +15,7 @@ import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+root = environ.Path(__file__) - 3
 
 
 env = environ.Env()
@@ -29,7 +30,7 @@ SECRET_KEY = 'django-insecure-a9+7s@tna4k56sr!c!y!9=6vj@t2+*fas13j6e&q@rh2fgxfmg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.str('DEBUG', default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -88,7 +89,7 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': env.str('POSTGRES_NAME', default='materials'),
+            'NAME': env.str('POSTGRES_DB', default='materials'),
             'USER': env.str('POSTGRES_USER', default='postgres'),
             'PASSWORD': env.str('POSTGRES_PASSWORD', default='12345'),
             'HOST': env.str('POSTGRES_HOST', default='localhost'),
@@ -145,7 +146,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+public_root = root.path('public/')
+MEDIA_ROOT = public_root('media')
+MEDIA_URL = '/media/'
+STATIC_ROOT = public_root('static')
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
