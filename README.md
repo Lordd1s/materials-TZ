@@ -2,7 +2,6 @@
 
 ## Installation
 
-### 1. Клонирование репозитория
 ```bash
 git clone https://github.com/Lordd1s/materials-example-drf.git
 cd materials-example-drf
