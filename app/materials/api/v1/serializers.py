@@ -39,12 +39,32 @@ class MaterialFullSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MaterialWriteSerializer(serializers.ModelSerializer):
-    subcategory_id = serializers.IntegerField()
+class MaterialCreateSerializer(serializers.ModelSerializer):
+    subcategory = serializers.IntegerField()
 
     class Meta:
         model = Material
-        fields = ('name', 'article', 'price', 'subcategory_id')
+        fields = ('name', 'article', 'price', 'subcategory')
+
+
+class MaterialPutUpdateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
+    article = serializers.IntegerField()
+    price = serializers.IntegerField()
+
+    class Meta:
+        model = Material
+        fields = ('name', 'article', 'price')
+
+
+class MaterialPatchUpdateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=False)
+    article = serializers.IntegerField(required=False)
+    price = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = Material
+        fields = ('name', 'article', 'price')
 
 
 class MaterialSerializerForTree(MaterialFullSerializer):

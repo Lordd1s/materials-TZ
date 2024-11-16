@@ -1,5 +1,6 @@
 from django.db import transaction
-from materials.api.v1.serializers import MaterialWriteSerializer
+from django.db.models import Q
+from materials.api.v1.serializers import MaterialCreateSerializer
 from materials.models import Material, Category
 from rest_framework.exceptions import ValidationError
 
@@ -14,7 +15,7 @@ def create_records(data: list[tuple], batch_size: int | None = None):
     """
     pre_materials = []
     for item in data:
-        serializer = MaterialWriteSerializer(
+        serializer = MaterialCreateSerializer(
             data={
                 'name': item[0],
                 'article': int(item[1]),
@@ -34,3 +35,19 @@ def create_records(data: list[tuple], batch_size: int | None = None):
     if pre_materials:
         with transaction.atomic():
             Material.objects.bulk_create(pre_materials, batch_size=batch_size)
+
+
+def get_subcategory(subcategory_id: int) -> Category | None:
+    """
+    Возвращает самую дочернюю категорию
+
+    :param subcategory_id: Идентификатор дочерней категории
+    :return: объект Category
+    """
+    category  = Category.objects.filter(
+            Q(id=subcategory_id)
+            &
+            ~Q(children__isnull=False)
+        ).first()
+
+    return category

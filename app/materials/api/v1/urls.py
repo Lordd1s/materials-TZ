@@ -14,5 +14,5 @@ router.register(r'categories', CategoryViewSet, basename='categories')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('xlsx/', CreateMaterialFromXLSX.as_view()),
+    path('xlsx/', CreateMaterialFromXLSX.as_view(), name='xlsx'),
 ]
