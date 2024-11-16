@@ -166,14 +166,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
         description='Возвращает категории плоским списком.',
         responses={200: CategoryListSerializer(many=True)},
     )
-    @action(detail=False, methods=['get'], url_path='flat_list')
+    @action(detail=False, methods=['get'], url_path='flat', url_name='flat')
     def list_categories(self, request):
         category = Category.objects.all()
         serializer = CategoryListSerializer(category, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema_field(CategoryTreeSerializer(many=True))
-    @action(detail=False, methods=['get'], url_path='tree')
+    @action(detail=False, methods=['get'], url_path='tree', url_name='tree')
     def tree(self, request):
         categories = Category.objects.filter(parent__isnull=True)
         serializer = CategoryTreeSerializer(categories, many=True)
