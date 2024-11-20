@@ -3,7 +3,6 @@ from rest_framework.test import APITestCase
 
 from materials.conftest import create_material, create_category
 
-from materials.models import Category
 
 
 class CategoryAPITest(APITestCase):
