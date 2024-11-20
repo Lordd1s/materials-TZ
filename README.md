@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-git clone https://github.com/Lordd1s/materials-example-drf.git
+git clone git@github.com/Lordd1s/materials-example-drf.git
 cd materials-example-drf
 
 ## .env example
