@@ -25,13 +25,6 @@ class CategoryWriteSerializer(serializers.ModelSerializer):
         fields = ('name', 'parent')
 
 
-class MaterialNameSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Material
-        fields = ('name', )
-
-
 class MaterialFullSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -71,15 +64,6 @@ class MaterialSerializerForTree(MaterialFullSerializer):
     pass
 
 
-class FileUploadSerializer(serializers.Serializer):
-    file = serializers.FileField()
-
-    def validate_file(self, value):
-        if not value.name.endswith('.xlsx'):
-            raise serializers.ValidationError('Only .xlsx files are allowed')
-        return value
-
-
 class CategoryTreeSerializer(serializers.ModelSerializer):
     subcategories = serializers.SerializerMethodField()
     materials = serializers.SerializerMethodField()
@@ -89,16 +73,25 @@ class CategoryTreeSerializer(serializers.ModelSerializer):
         model = Category
         fields = ('id', 'name', 'subcategories', 'materials', 'total_sum')
 
-    def get_subcategories(self, instance: Category):
+    def get_subcategories(self, instance: Category) -> dict | None:
         subcategories = Category.objects.filter(parent=instance)
         serializer = CategoryTreeSerializer(subcategories, many=True)
         return serializer.data
 
-    def get_materials(self, instance: Category):
+    def get_materials(self, instance: Category) -> dict | None:
         materials = Material.objects.filter(category=instance).select_related('category')
         serializer = MaterialSerializerForTree(materials, many=True)
         return serializer.data
 
-    def get_total_sum(self, instance: Category):
+    def get_total_sum(self, instance: Category) -> int:
         result = calculate_total(instance)
         return result
+
+
+class FileUploadSerializer(serializers.Serializer):
+    file = serializers.FileField()
+
+    def validate_file(self, value):
+        if not value.name.endswith('.xlsx'):
+            raise serializers.ValidationError('Only .xlsx files are allowed')
+        return value
