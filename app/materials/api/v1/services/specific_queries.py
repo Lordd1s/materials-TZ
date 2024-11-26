@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.db.models import Q
-from materials.api.v1.serializers import MaterialCreateSerializer
+from materials.api.v1.serializers import MaterialFromXLSXSerializer
 from materials.models import Material, Category
 from rest_framework.exceptions import ValidationError
 
@@ -15,7 +15,7 @@ def create_records(data: list[tuple], batch_size: int | None = None):
     """
     pre_materials = []
     for item in data:
-        serializer = MaterialCreateSerializer(
+        serializer = MaterialFromXLSXSerializer(
             data={
                 'name': item[0],
                 'article': int(item[1]),

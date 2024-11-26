@@ -40,6 +40,13 @@ class MaterialCreateSerializer(serializers.ModelSerializer):
         fields = ('name', 'article', 'price', 'subcategory')
 
 
+class MaterialFromXLSXSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    article = serializers.IntegerField()
+    price = serializers.IntegerField()
+
+
+
 class MaterialPutUpdateSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     article = serializers.IntegerField()
